@@ -1,0 +1,14 @@
+uuid: 4cf5c32c-180e-48cb-a04c-0413df09858e
+name: dustins-circle2
+mail: dustin.m.leblanc@gmail.com
+slogan: ''
+page:
+  403: ''
+  404: ''
+  front: /node
+admin_compact_mode: false
+weight_select_max: 100
+langcode: en
+default_langcode: en
+_core:
+  default_config_hash: AyT9s8OUcclfALRE_imByOMgtZ19eOlqdF6zI3p7yqo
