@@ -1,0 +1,14 @@
+{
+  "name": "drupal/big_red_bear",
+  "type": "drupal-module",
+  "description": "A Very Cornellian Module",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/big_red_bear",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/big_red_bear",
+    "source": "http://cgit.drupalcode.org/big_red_bear"
+  },
+  "require": { }
+}

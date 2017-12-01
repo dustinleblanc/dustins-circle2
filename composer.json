@@ -34,7 +34,10 @@
     "drush-ops/behat-drush-endpoint": "^0.0.4",
     "pantheon-systems/quicksilver-pushback": "~1",
     "phpunit/phpunit": "^4.8",
-    "symfony/css-selector": "^2.8"
+    "symfony/css-selector": "^2.8",
+    "consolidation/robo": "^1.1",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
+    "drupal/coder": "^8.2.12"
   },
   "conflict": {
       "drupal/drupal": "*"

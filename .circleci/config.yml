@@ -69,17 +69,23 @@ jobs:
                 paths:
                     - $(TERMINUS_PLUGINS_DIR:-~/.terminus/plugins)
 
+            - setup_remote_docker:
+                reusable: true
             - run:
-                name: lint php code for syntax errors
-                command: composer -n lint
+              name: Install Lando
+              command: |
+                curl -fsSL -o /tmp/lando-latest.deb http://installer.kalabox.io/lando-latest-dev.deb
+                sudo dpkg -i /tmp/lando-latest.deb
+                lando start -- -v
+            - run:
+              name: Bootstrap App
+              command: |
+                lando composer install
+                lando composer prepare-for-pantheon
 
             - run:
-                name: check coding standards
-                command: composer -n code-sniff
-
-            - run:
-                name: run unit tests
-                command: composer -n unit-test
+                name: Run Test Suite
+                command: lando test
 
     build_deploy_and_test:
         <<: *defaults
