@@ -72,69 +72,24 @@ jobs:
             - setup_remote_docker:
                 reusable: true
             - run:
-              name: Install Lando
-              command: |
-                curl -fsSL -o /tmp/lando-latest.deb http://installer.kalabox.io/lando-latest-dev.deb
-                sudo dpkg -i /tmp/lando-latest.deb
-                lando start -- -v
+                name: Install Lando
+                command: |
+                  curl -fsSL -o /tmp/lando-latest.deb http://installer.kalabox.io/lando-latest-dev.deb
+                  sudo dpkg -i /tmp/lando-latest.deb
+                  lando start -- -v
             - run:
-              name: Bootstrap App
-              command: |
-                lando composer install
-                lando composer prepare-for-pantheon
+                name: Bootstrap App
+                command: |
+                  lando composer install
+                  lando composer prepare-for-pantheon
+                  lando terminus auth:login --machine-token=$PANTHEON_MACHINE_TOKEN
+                  lando pull --code=none --database=dev --files=dev --rsync
+
 
             - run:
                 name: Run Test Suite
                 command: lando test
 
-    build_deploy_and_test:
-        <<: *defaults
-        steps:
-            - checkout
-
-            - restore_cache:
-                keys:
-                    - composer-cache
-                    - terminus-install
-
-            - run:
-                # Set TERMINUS_ENV and related environment variables.
-                # https://github.com/pantheon-systems/docker-build-tools-ci/blob/1.x/scripts/set-environment
-                name: dependencies
-                command: /build-tools-ci/scripts/set-environment
-
-            - run:
-                name: install dev dependencies, build assets, etc.
-                command: ./.circleci/scripts/pantheon/01-prepare
-
-            - run:
-                name: build assets
-                command: composer -n build-assets
-
-            - run:
-                name: prepare database for site-under test
-                command: ./.circleci/scripts/pantheon/02-init-site-under-test-clone-existing
-                # command: ./.circleci/scripts/pantheon/02-init-site-under-test-reinstall-new
-
-            - run:
-                name: run functional tests with Behat
-                command: ./tests/scripts/run-behat
-
-            - run:
-                name: post-test actions
-                command: ./.circleci/scripts/pantheon/03-post-test
-
-            - run:
-                name: handle merge to master (if needed)
-                command: ./.circleci/scripts/pantheon/04-merge-master
-
-            - run:
-                name: remove transient test fixtures
-                command: ./.circleci/scripts/pantheon/09-cleanup-fixtures
-
-    # TODO:
-    # 04-merge-master
-    # 09-cleanup-fixtures
 
 workflows:
   version: 2
@@ -142,5 +97,3 @@ workflows:
     jobs:
       # Install dev dependencies and do simple tests (sniff, unit tests, etc.)
       - build
-      # Build deploy and test on target platform
-      - build_deploy_and_test
